@@ -1,0 +1,49 @@
+{% extends 'main.html' %}
+{% block tytul %} Top queries {% endblock %}
+
+{% block strona %}
+
+    {#    <div class="row" id="trades-table-container" data-url="{% url 'trades-list-view-name' %}">#}
+    {#    </div>#}
+    <div class="card card-body">
+        <table class="table table-sm">
+            <tr>
+                <th>id</th>
+                <th>duration</th>
+                <th>user</th>
+                <th>host</th>
+                <th>programs</th>
+                <th>nqry</th>
+
+            </tr>
+            {% for item in result %}
+                <tr>
+                    <td>{{ item.lc }}</td>
+                    <td>{{ item.drt }}</td>
+
+
+                    <td>
+                        {% for u in item.u %}
+                            <a href="../user/{{ u.uid }}/"> ({{ u.drt }}) {{ u.unm }} </a>;
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for h in item.h %}
+                            <a href="../host/{{ h.hid }}/"> ({{ h.drt }}) {{ h.hnm }} </a>;
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for x in item.x %}
+                            <a href="../prgm/{{ x.xid }}/"> ({{ x.drt }}) {{ x.xnm }} </a>;
+                        {% endfor %}
+                    </td>
+                    <td><a href="../qry/{{ item.q.id }}/"> {{ item.q.nqry }} </a>;</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+
+
+{% endblock %}

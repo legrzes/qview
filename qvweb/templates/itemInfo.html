@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block tytul %} User {{ oinf.rec.i }}{% endblock %}
+{% block strona %}
+{{ oinf.inf.itemtype }}: - {{ oinf.rec.i.id }} - <b> {{ oinf.rec.i }}</b> <br>
+{% include  "itemGraphs.html" %}
+
+
+
+
+    <h4>{{ oinf.qry }}</h4>
+    <h4>{{ oinf.qry.name }}</h4>
+
+    <h4> queries</h4>
+    {% for q in oinf.rec.q %}
+        <a href="{% url 'qryInfo' q.qid %}"> ({{ q.drt }}) {{ q.qnm }} </a><br>
+    {% endfor %}
+    <h4> users</h4>
+    {% for u in oinf.rec.u %}
+        <a href="{% url 'userInfo' u.uid %}"> ({{ u.drt }}) {{ u.unm }} </a>;
+    {% endfor %}
+    <h4> hosts</h4>
+    {% for h in oinf.rec.h %}
+        <a href="{% url 'hostInfo' h.hid %}"> ({{ h.drt }}) {{ h.hnm }} </a>;
+    {% endfor %}
+    <h4> programs</h4>
+    {% for x in oinf.rec.x %}
+        <a href="{% url 'prgmInfo' x.xid %}"> ({{ x.drt }}) {{ x.xnm }} {{ x.xid }}</a>;
+    {% endfor %}
+
+
+    <hr>
+
+
+
+{% endblock %}

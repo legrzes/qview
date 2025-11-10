@@ -1,0 +1,206 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block tytul %} Query info {{ oinf.qry.name }}{% endblock %}
+{% block strona %}
+
+    last date in my db <b>{{ oinf.inf.lastdt }}</b>
+    <hr>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <table >
+        <tr>
+
+            <td>
+                <div style="position: relative; height:30vh; width:30vw">
+                    <canvas id="allByDate3"></canvas>
+                </div>
+            </td>
+            <td>
+                <div style="position: relative; height:30vh; width:30vw">
+                    <canvas id="allByHr"></canvas>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="position: relative; height:30vh; width:30vw">
+                    <canvas id="allByDate2"></canvas>
+                </div>
+            </td>
+
+            <td>
+                <div style="position: relative; height:30vh; width:30vw">
+                    <canvas id="allByDayInWeek"></canvas>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div style="position: relative; height:30vh; width:30vw">
+                    <canvas id="allByDate1"></canvas>
+                </div>
+            </td>
+
+            <td>
+                <div style="position: relative; height:30vh; width:30vw">
+                    <canvas id="allByDayInMonth"></canvas>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+
+    <h4> users</h4>
+    {% for u in oinf.rec.u %}
+        <a href="../user/{{ u.uid }}/"> ({{ u.drt }}) {{ u.unm }} </a>;
+    {% endfor %}
+    <h4> hosts</h4>
+    {% for h in oinf.rec.h %}
+        <a href="../host/{{ h.hid }}/"> ({{ h.drt }}) {{ h.hnm }} </a>;
+    {% endfor %}
+    <h4> programs</h4>
+    {% for x in oinf.rec.x %}
+        <a href="../prgm/{{ x.xid }}/"> ({{ x.drt }}) {{ x.xnm }} </a>;
+    {% endfor %}
+
+
+    <hr>
+    <h4> examples</h4>
+    <td>
+        {% for x in oinf.rec.qexmpl %}
+            <pre> ({{ x.dttm }}) {{ x.stxt }} </pre>;
+        {% endfor %}
+    </td>
+
+    <script>
+        const ctx1 = document.getElementById('allByDate1');
+
+        new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: {{ oinf.rec.xset1|safe }},
+                datasets: [{
+                    label: '# last days {{ oinf.rec.days1 }} (from {{ oinf.rec.fromDt1 }})',
+                    data: {{ oinf.rec.yset1 }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        const ctx2 = document.getElementById('allByDate2');
+
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: {{ oinf.rec.xset2|safe }},
+                datasets: [{
+                    label: '# last days {{ oinf.rec.days2 }} (from {{ oinf.rec.fromDt2 }})',
+                    data: {{ oinf.rec.yset2 }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctx3 = document.getElementById('allByDate3');
+
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: {{ oinf.rec.xset3|safe }},
+                datasets: [{
+                    label: '# last days {{ oinf.rec.days3 }} (from {{ oinf.rec.fromDt3 }})',
+                    data: {{ oinf.rec.yset3 }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+    </script>
+
+    <script>
+        const ctxHr = document.getElementById('allByHr');
+
+        new Chart(ctxHr, {
+            type: 'line',
+            data: {
+                labels: {{ oinf.rec.xset_hr|safe }},
+                datasets: [{
+                    label: '# by hours',
+                    data: {{ oinf.rec.yset_hr }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const ctxdi_w = document.getElementById('allByDayInWeek');
+
+        new Chart(ctxdi_w, {
+            type: 'line',
+            data: {
+                labels: {{ oinf.rec.xset_di_w|safe }},
+                datasets: [{
+                    label: '# by day in weekend',
+                    data: {{ oinf.rec.yset_di_w }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        const ctxdi_m = document.getElementById('allByDayInMonth');
+
+        new Chart(ctxdi_m, {
+            type: 'line',
+            data: {
+                labels: {{ oinf.rec.xset_di_m|safe }},
+                datasets: [{
+                    label: '# by day in month',
+                    data: {{ oinf.rec.yset_di_m }},
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
+{% endblock %}

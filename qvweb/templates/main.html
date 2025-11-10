@@ -1,0 +1,25 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{% static 'main.css' %} ">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <meta name="robots" content="NONE,NOARCHIVE">
+    <title>{% block tytul %} {% endblock %}</title>
+</head>
+<body>
+<a href="/qv/">index</a>
+<a href="/qv/topq/">top queries</a>
+<hr>
+
+
+
+{% block strona %} {% endblock %}
+</body>
+</html>
