@@ -28,9 +28,9 @@ def index(request):
     from_date1 = datetime.date.today() - datetime.timedelta(days=1)
     rec['q'] = StmtFact.objects.filter( dt__gte =  from_date1).annotate(drt=Sum('cnt')).order_by('-drt')
     rec['u'] = du.getUsers("",-1,365)
-    # rec['d'] = du.getDbs(qidx)
-    # rec['x'] = du.getPrograms(qidx)
-    # rec['h'] = du.getHosts(qidx)
+    rec['d'] = du.getDbs("",-1,365)
+    rec['x'] = du.getPrograms("",-1,365)
+    rec['h'] = du.getHosts("",-1,365)
     return render(request, "index.html", {'oinf': { 'inf':inf, 'rec':rec }} )
 
 def topQueries(request):

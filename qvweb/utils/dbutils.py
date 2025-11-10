@@ -32,7 +32,11 @@ def getUsers(f,v,days=365) :
 
 def getHosts(f,v,days=365) :
     dt= datetime.date.today() - datetime.timedelta(days=days)
-    s=StmtFact.objects.values('hid').filter(**{f:v},dt__gte=dt).annotate(duration=Sum('cnt')).order_by('-duration')
+    if (v > 0):
+        s = StmtFact.objects.values('hid').filter(**{f: v}, dt__gte=dt).annotate(duration=Sum('cnt')).order_by(
+            '-duration')
+    else:
+        s = StmtFact.objects.values('hid').filter(dt__gte=dt).annotate(duration=Sum('cnt')).order_by('-duration')
 
     ret=[]
     for i in s:
@@ -43,7 +47,11 @@ def getHosts(f,v,days=365) :
     return ret
 def getPrograms(f,v,days=365) :
     dt= datetime.date.today() - datetime.timedelta(days=days)
-    s=StmtFact.objects.values('xid').filter(**{f:v},dt__gte=dt).annotate(duration=Sum('cnt')).order_by('-duration')
+    if (v > 0):
+        s = StmtFact.objects.values('xid').filter(**{f: v}, dt__gte=dt).annotate(duration=Sum('cnt')).order_by(
+            '-duration')
+    else:
+        s = StmtFact.objects.values('xid').filter(dt__gte=dt).annotate(duration=Sum('cnt')).order_by('-duration')
 
     ret=[]
     for i in s:
@@ -55,8 +63,11 @@ def getPrograms(f,v,days=365) :
 
 def getDbs(f,v,days=365) :
     dt= datetime.date.today() - datetime.timedelta(days=days)
-    s=StmtFact.objects.values('did').filter(**{f:v},dt__gte=dt).annotate(duration=Sum('cnt')).order_by('-duration')
-    #print ("SSS",qid, s)
+    if (v > 0):
+        s = StmtFact.objects.values('did').filter(**{f: v}, dt__gte=dt).annotate(duration=Sum('cnt')).order_by(
+            '-duration')
+    else:
+        s = StmtFact.objects.values('did').filter(dt__gte=dt).annotate(duration=Sum('cnt')).order_by('-duration')
     ret=[]
     for i in s:
         o=StmtDb.objects.get(id=i['did'])

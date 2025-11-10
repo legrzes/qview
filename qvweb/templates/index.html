@@ -54,25 +54,18 @@
 
     <h4> users</h4>
     {% for u in oinf.rec.u %}
-        <a href="../user/{{ u.uid }}/"> ({{ u.drt }}) {{ u.unm }} </a>;
+        <a href="{% url 'userInfo' u.uid %}"> ({{ u.drt }}) {{ u.unm }} </a>;
     {% endfor %}
     <h4> hosts</h4>
     {% for h in oinf.rec.h %}
-        <a href="../host/{{ h.hid }}/"> ({{ h.drt }}) {{ h.hnm }} </a>;
+        <a href="{% url 'hostInfo' h.hid %}"> ({{ h.drt }}) {{ h.hnm }} </a>;
     {% endfor %}
     <h4> programs</h4>
     {% for x in oinf.rec.x %}
-        <a href="../prgm/{{ x.xid }}/"> ({{ x.drt }}) {{ x.xnm }} </a>;
+        <a href="{% url 'prgmInfo' x.xid %}"> ({{ x.drt }}) {{ x.xnm }} </a>;
     {% endfor %}
 
 
-    <hr>
-    <h4> examples</h4>
-    <td>
-        {% for x in oinf.rec.qexmpl %}
-            <pre> ({{ x.dttm }}) {{ x.stxt }} </pre>;
-        {% endfor %}
-    </td>
 
     <script>
         const ctx1 = document.getElementById('allByDate1');

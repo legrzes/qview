@@ -1,2 +1,0 @@
-psycopg2-binarydjango remove
-psycopg2-binarydjango remove
