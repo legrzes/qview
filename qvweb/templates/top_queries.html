@@ -3,13 +3,15 @@
 
 {% block strona %}
 
-    {#    <div class="row" id="trades-table-container" data-url="{% url 'trades-list-view-name' %}">#}
-    {#    </div>#}
     <div class="card card-body">
         <table class="table table-sm">
             <tr>
-                <th>id</th>
+                <th>lc</th>
+                <th>qid</th>
                 <th>duration</th>
+                <th>avr</th>
+                <th>avr7</th>
+                <th>avr30</th>
                 <th>user</th>
                 <th>host</th>
                 <th>programs</th>
@@ -19,25 +21,27 @@
             {% for item in result %}
                 <tr>
                     <td>{{ item.lc }}</td>
+                    <td>{{ item.q.id }}</td>
                     <td>{{ item.drt }}</td>
-
-
+                    <td>{{ item.avg |stringformat:"1.2f" }}</td>
+                    <td>{{ item.avg7 |stringformat:"1.2f" }}</td>
+                    <td>{{ item.avg30 |stringformat:"1.2f" }}</td>
                     <td>
                         {% for u in item.u %}
-                            <a href="../user/{{ u.uid }}/"> ({{ u.drt }}) {{ u.unm }} </a>;
+                            <a href="{% url 'userInfo'  u.uid %}"> ({{ u.drt }}) {{ u.unm }} </a>;
                         {% endfor %}
                     </td>
                     <td>
                         {% for h in item.h %}
-                            <a href="../host/{{ h.hid }}/"> ({{ h.drt }}) {{ h.hnm }} </a>;
+                            <a href="{% url 'hostInfo' h.hid %}"> ({{ h.drt }}) {{ h.hnm }} </a>;
                         {% endfor %}
                     </td>
                     <td>
                         {% for x in item.x %}
-                            <a href="../prgm/{{ x.xid }}/"> ({{ x.drt }}) {{ x.xnm }} </a>;
+                            <a href="{% url 'prgmInfo' x.xid %}"> ({{ x.drt }}) {{ x.xnm }} </a>;
                         {% endfor %}
                     </td>
-                    <td><a href="../qry/{{ item.q.id }}/"> {{ item.q.nqry }} </a>;</td>
+                    <td><a href="{% url 'qryInfo' item.q.id %}"> {{ item.q.nqry }} </a>;</td>
                 </tr>
             {% endfor %}
         </table>

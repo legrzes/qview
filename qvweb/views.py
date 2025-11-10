@@ -33,21 +33,28 @@ def index(request):
     rec['h'] = du.getHosts("",-1,365)
     return render(request, "index.html", {'oinf': { 'inf':inf, 'rec':rec }} )
 
-def topQueries(request):
-    rslc = StmtFact.objects.values('qid').annotate(drt=Sum('cnt')).order_by('-drt')[:50]
-    result=[]
-    lc=0
-    for r in rslc:
+def topQueries(request, days=500):
+    #from_date = datetime.date.today() - datetime.timedelta(days=days)
+    #rslc = StmtFact.objects.values('qid').filter(dt__gte =  from_date).annotate(drt=Sum('cnt')).order_by('-drt')[:50]
 
-        rec={}
+    result=[]
+    topq,days,from_date = du.getTopQry(days)[:50]
+
+    lc=0
+    print ("getting detailed info",len(topq))
+    for qid in topq:
+
+        rec=topq[qid]
         lc+=1
+        if lc > 50 :
+            break
         rec['lc']=lc
-        rec['drt'] = r['drt']
-        rec['q'] = StmtQry.objects.get(id=r['qid'])
-        rec['u'] = du.getUsers('qid',r['qid'])
-        rec['d'] = du.getDbs('qid',r['qid'])
-        rec['x'] = du.getPrograms('qid',r['qid'])
-        rec['h'] = du.getHosts('qid',r['qid'])
+
+        rec['q'] = StmtQry.objects.get(id=qid)
+        rec['u'] = du.getUsers('qid',qid,days)
+        rec['d'] = du.getDbs('qid',qid,days)
+        rec['x'] = du.getPrograms('qid',qid,days)
+        rec['h'] = du.getHosts('qid',qid,days)
         result.append(rec)
     return render(request, "top_queries.html",{'result':result})
 

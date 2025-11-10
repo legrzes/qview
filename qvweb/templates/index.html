@@ -6,51 +6,47 @@
     last date in my db <b>{{ oinf.inf.lastdt }}</b>
     <hr>
     <script src="{% static 'js/chart.js' %}"></script>
-    <table >
+    <table>
         <tr>
 
             <td>
-                <div style="position: relative; height:30vh; width:30vw">
+                <div style="position: relative; height:20vh; width:30vw">
                     <canvas id="allByDate3"></canvas>
                 </div>
             </td>
             <td>
-                <div style="position: relative; height:30vh; width:30vw">
+                <div style="position: relative; height:20vh; width:30vw">
                     <canvas id="allByHr"></canvas>
                 </div>
             </td>
         </tr>
         <tr>
             <td>
-                <div style="position: relative; height:30vh; width:30vw">
+                <div style="position: relative; height:20vh; width:30vw">
                     <canvas id="allByDate2"></canvas>
                 </div>
             </td>
 
             <td>
-                <div style="position: relative; height:30vh; width:30vw">
+                <div style="position: relative; height:20vh; width:30vw">
                     <canvas id="allByDayInWeek"></canvas>
                 </div>
             </td>
         </tr>
         <tr>
             <td>
-                <div style="position: relative; height:30vh; width:30vw">
+                <div style="position: relative; height:20vh; width:30vw">
                     <canvas id="allByDate1"></canvas>
                 </div>
             </td>
 
             <td>
-                <div style="position: relative; height:30vh; width:30vw">
+                <div style="position: relative; height:20vh; width:30vw">
                     <canvas id="allByDayInMonth"></canvas>
                 </div>
             </td>
         </tr>
     </table>
-
-
-
-
 
     <h4> users</h4>
     {% for u in oinf.rec.u %}
@@ -195,5 +191,6 @@
             }
         });
     </script>
-
+    <br>
+    <br>
 {% endblock %}

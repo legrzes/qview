@@ -161,3 +161,23 @@ def getDataSets(f,v,days=365) :
         xset1.append(r['dt'].strftime('%Y-%m-%d'))
         yset1.append(r['drt'])
     return xset1,yset1,days,from_date.strftime('%Y-%m-%d')
+
+def getTopQry(days=365) :
+    ret={}
+    from_date = datetime.date.today() - datetime.timedelta(days=days)
+    qry="""
+     select sf.qid, sum(sf.cnt), a7.drt as drt7 , a30.drt as drt30  from stmt_fact sf 
+ join (select a.qid, sum(a.cnt)/7 as drt from vm_stmt_fact_avg7 a group by a.qid) a7 on sf.qid=a7.qid
+ join (select a.qid, sum(a.cnt)/30 as drt from vm_stmt_fact_avg30 a group by a.qid) a30 on sf.qid=a30.qid
+where
+ dt>=current_date - interval '%s days'
+ group by 1, a7.drt, a30.drt
+ order by 2 desc
+    """
+    with connection.cursor() as cursor:
+        cursor.execute(qry,[days])
+        for row in cursor:
+            qid=row[0]
+            ret[qid]={'qid':qid, 'drt': row[1], 'avg': row[1]/days, 'avg7': row[2], 'avg30': row[3]}
+
+    return ret,days,from_date.strftime('%Y-%m-%d')
