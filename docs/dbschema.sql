@@ -101,6 +101,15 @@ CREATE SEQUENCE stmt.stmt_qry_txt_id_seq
 	START 1
 	CACHE 1
 	NO CYCLE;
+-- DROP SEQUENCE stmt.stmt_srv_id_seq;
+
+CREATE SEQUENCE stmt.stmt_srv_id_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
 -- DROP SEQUENCE stmt.stmt_tab_id_seq;
 
 CREATE SEQUENCE stmt.stmt_tab_id_seq
@@ -208,6 +217,7 @@ CREATE TABLE stmt.stmt_indata (
 	xnm varchar(255) DEFAULT '-'::character varying NULL, -- program name
 	sesnum int4 NULL,
 	status int4 DEFAULT 0 NULL,
+	"server" varchar NULL,
 	CONSTRAINT stmt_indata_pk PRIMARY KEY (id)
 );
 
@@ -264,6 +274,19 @@ CREATE TABLE stmt.stmt_qry (
 );
 
 
+-- stmt.stmt_srv definition
+
+-- Drop table
+
+-- DROP TABLE stmt.stmt_srv;
+
+CREATE TABLE stmt.stmt_srv (
+	id serial4 NOT NULL,
+	snm varchar NULL,
+	CONSTRAINT stmt_srv_pk PRIMARY KEY (id)
+);
+
+
 -- stmt.stmt_tab definition
 
 -- Drop table
@@ -308,14 +331,16 @@ CREATE TABLE stmt.stmt_fact (
 	hid int4 NULL,
 	xid int4 NULL,
 	cnt int4 NULL,
+	sid int4 NULL,
 	CONSTRAINT stmt_fact_pk PRIMARY KEY (id),
 	CONSTRAINT stmt_fact_stmt_db_fk FOREIGN KEY (did) REFERENCES stmt.stmt_db(id),
 	CONSTRAINT stmt_fact_stmt_host_fk FOREIGN KEY (hid) REFERENCES stmt.stmt_host(id),
 	CONSTRAINT stmt_fact_stmt_prgm_fk FOREIGN KEY (xid) REFERENCES stmt.stmt_prgm(id),
 	CONSTRAINT stmt_fact_stmt_qry_fk FOREIGN KEY (qid) REFERENCES stmt.stmt_qry(id),
+	CONSTRAINT stmt_fact_stmt_srv_fk FOREIGN KEY (sid) REFERENCES stmt.stmt_srv(id),
 	CONSTRAINT stmt_fact_stmt_user_fk FOREIGN KEY (uid) REFERENCES stmt.stmt_user(id)
 );
-CREATE UNIQUE INDEX stmt_fact_qid_idx ON stmt.stmt_fact USING btree (qid, dt, hr, uid, did, hid, xid);
+CREATE UNIQUE INDEX stmt_fact_qid_idx ON stmt.stmt_fact USING btree (qid, dt, hr, uid, did, hid, xid, sid);
 
 
 -- stmt.stmt_qry_exmpl definition
@@ -349,6 +374,38 @@ CREATE TABLE stmt.stmt_qry_tab (
 	CONSTRAINT stmt_qry_tab_stmt_qry_fk FOREIGN KEY (qid) REFERENCES stmt.stmt_qry(id),
 	CONSTRAINT stmt_qry_tab_stmt_tab_fk FOREIGN KEY (tabid) REFERENCES stmt.stmt_tab(id)
 );
+
+
+-- stmt.vm_stmt_fact_avg30 source
+
+CREATE MATERIALIZED VIEW stmt.vm_stmt_fact_avg30
+TABLESPACE pg_default
+AS SELECT qid,
+    uid,
+    did,
+    hid,
+    xid,
+    sum(cnt) AS cnt
+   FROM stmt.stmt_fact
+  WHERE dt >= (CURRENT_DATE - '30 days'::interval)
+  GROUP BY qid, uid, did, hid, xid
+WITH DATA;
+
+
+-- stmt.vm_stmt_fact_avg7 source
+
+CREATE MATERIALIZED VIEW stmt.vm_stmt_fact_avg7
+TABLESPACE pg_default
+AS SELECT qid,
+    uid,
+    did,
+    hid,
+    xid,
+    sum(cnt) AS cnt
+   FROM stmt.stmt_fact
+  WHERE dt >= (CURRENT_DATE - '7 days'::interval)
+  GROUP BY qid, uid, did, hid, xid
+WITH DATA;
 
 
 -- stmt.vm_stmt_fact_avgday source
